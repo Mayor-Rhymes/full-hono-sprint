@@ -1,16 +1,33 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import { serve } from "@hono/node-server";
+import { Hono } from "hono";
+import { logger } from 'hono/logger'
+import {jwt} from 'hono/jwt';
+import { config } from "dotenv";
+import users from "../routes/users";
 
-const app = new Hono()
+config();
+const app = new Hono({
+  strict: false,
+});
+app.use("*", logger());
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+app.route("/api/auth", users);
 
-const port = 3000
-console.log(`Server is running on port ${port}`)
+app.get("/", (c) => {
+  return c.json(
+    {
+      message: "Hello Hono",
+    },
+    200
+  );
+});
 
-serve({
-  fetch: app.fetch,
-  port
-})
+const port = process.env.port || 5000;
+
+serve(
+  {
+    fetch: app.fetch,
+    port: port as number,
+  },
+  () => console.log(`Server is running on port http://localhost:${port}`)
+);
