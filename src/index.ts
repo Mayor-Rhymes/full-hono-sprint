@@ -1,22 +1,25 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { logger } from 'hono/logger'
-import {jwt} from 'hono/jwt';
+import finance from "../routes/finances";
 import { config } from "dotenv";
 import users from "../routes/users";
+import {cors} from "hono/cors";
 
 config();
 const app = new Hono({
   strict: false,
 });
 app.use("*", logger());
+app.use("*", cors());
 
 app.route("/api/auth", users);
+app.route("/api/portfolio", finance);
 
 app.get("/", (c) => {
   return c.json(
     {
-      message: "Hello Hono",
+      message: Date.now() * 1000
     },
     200
   );
