@@ -13,7 +13,7 @@ export const authMiddleware = factory.createMiddleware(
       },
     });
 
-    console.log(user);
+    console.log(payload, user);
 
     if (user) {
       c.set("user", user);
