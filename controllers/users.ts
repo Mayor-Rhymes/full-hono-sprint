@@ -2,11 +2,13 @@ import { prisma } from "../config/db";
 import { hash } from "bcrypt";
 import { User, UserExists } from "../lib/utils/types";
 import { compare } from "bcrypt";
-import { sign } from "hono/jwt";
 import { sign as signjwt } from "jsonwebtoken";
 import { createFactory } from "hono/factory";
 import { zValidator } from "@hono/zod-validator";
 import { userExistsSchema, userSchema } from "../lib/utils/zodSchemas";
+
+
+
 
 const factory = createFactory();
 
@@ -58,12 +60,12 @@ export const createUser = factory.createHandlers(
 
     const accessToken = signjwt(
       { id: user.id, username: user.username },
-      process.env.jwt_SECRET as string,
+      process.env.JWT_SECRET as string,
       { expiresIn: "10m" }
     );
     const refreshToken = signjwt(
       { id: user.id, username: user.username },
-      process.env.jwt_SECRET as string,
+      process.env.REFRESH_TOKEN_SECRET as string,
       { expiresIn: "30d" }
     );
     const fullUser = { ...user, accessToken, refreshToken };
@@ -93,12 +95,12 @@ export const checkUserExists = factory.createHandlers(
     }
     const accessToken = signjwt(
       { id: user.id, username: user.username },
-      process.env.jwt_SECRET as string,
+      process.env.JWT_SECRET as string,
       { expiresIn: "10m" }
     );
     const refreshToken = signjwt(
       { id: user.id, username: user.username },
-      process.env.jwt_SECRET as string,
+      process.env.REFRESH_TOKEN_SECRET as string,
       { expiresIn: "30d" }
     );
 
@@ -106,6 +108,13 @@ export const checkUserExists = factory.createHandlers(
     return c.json({ message: "You are logged in", user: fullUser }, 201);
   }
 );
+
+
+
+const handleRefreshToken = () => {
+
+    
+}
 
 //protected
 // export const changeInfo = async (c: Context) => {
