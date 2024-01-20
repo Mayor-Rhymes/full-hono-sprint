@@ -61,7 +61,7 @@ export const createUser = factory.createHandlers(
     const accessToken = signjwt(
       { id: user.id, username: user.username },
       process.env.JWT_SECRET as string,
-      { expiresIn: "10m" }
+      { expiresIn: "1d" }
     );
     const refreshToken = signjwt(
       { id: user.id, username: user.username },
@@ -96,7 +96,7 @@ export const checkUserExists = factory.createHandlers(
     const accessToken = signjwt(
       { id: user.id, username: user.username },
       process.env.JWT_SECRET as string,
-      { expiresIn: "10m" }
+      { expiresIn: "10d" }
     );
     const refreshToken = signjwt(
       { id: user.id, username: user.username },
