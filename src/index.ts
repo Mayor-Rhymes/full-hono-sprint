@@ -32,5 +32,4 @@ serve(
     fetch: app.fetch,
     port: port as number,
   },
-  () => console.log(`Server is running on port http://localhost:${port}`)
 );
